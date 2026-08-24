@@ -9,7 +9,7 @@ script. Give it only one image and the other variant is derived for you.
 
 ### Install
 
-Open the `.dmg` and drag **Dynamic Wallpaper** into `Applications`.
+Open the `.dmg` and drag **Penumbra** into `Applications`.
 
 The app is ad-hoc signed and **not notarized**, so on first launch macOS says it
 "could not verify that this app is free of malware". That is a signing status, not
@@ -18,7 +18,7 @@ a verdict about the app. Two ways past it:
 - **Terminal** — clear the quarantine flag the download added:
 
   ```sh
-  xattr -dr com.apple.quarantine "/Applications/Dynamic Wallpaper.app"
+  xattr -dr com.apple.quarantine "/Applications/Penumbra.app"
   ```
 
 - **System Settings** — try to open the app once, let it be blocked, then go to

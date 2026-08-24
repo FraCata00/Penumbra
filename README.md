@@ -1,4 +1,6 @@
-# Dynamic Wallpaper
+# Penumbra
+
+*The penumbra is the band between full light and full shadow.*
 
 A macOS app for building **Light & Dark** wallpapers: a single `.heic` file holding
 both the daytime and the night image, which macOS switches between on its own when
@@ -8,7 +10,7 @@ the switching by reading a metadata tag inside the file.
 ## Download
 
 Grab the latest [release](../../releases): open the `.dmg` and drag
-**Dynamic Wallpaper** into the `Applications` folder next to it. A `.zip` of the
+**Penumbra** into the `Applications` folder next to it. A `.zip` of the
 bare app is attached too.
 
 Requires **macOS 26** (Tahoe) on Apple Silicon.
@@ -18,7 +20,7 @@ The app is ad-hoc signed and **not notarized**, so on first launch macOS says it
 verdict about the app. Clear the quarantine flag the download added:
 
 ```sh
-xattr -dr com.apple.quarantine "/Applications/Dynamic Wallpaper.app"
+xattr -dr com.apple.quarantine "/Applications/Penumbra.app"
 ```
 
 Or open it once, let macOS block it, then click **Open Anyway** at the bottom of
@@ -65,8 +67,8 @@ Applied wallpapers land in `~/Pictures/Wallpapers/`.
 ## Build
 
 ```sh
-./build.sh                 # produces build/Dynamic Wallpaper.app
-./Tools/make-dmg.sh 1.0.0  # packages it as a drag-to-install disk image
+./build.sh                 # produces build/Penumbra.app
+./Tools/make-dmg.sh 1.1.0  # packages it as a drag-to-install disk image
 ./Tools/make-icon.sh       # regenerates the icon (drawn from code)
 ```
 
@@ -85,7 +87,7 @@ Sources/
   ContentView.swift         # window layout and backdrop
   DesktopPreview.swift      # one variant inside a mock desktop, and the drop target
   InspectorPanel.swift      # the glass column on the right
-  DynamicWallpaperApp.swift # entry point
+  PenumbraApp.swift         # entry point
 Tools/mkicon.swift          # app icon drawn with CoreGraphics
 ```
 

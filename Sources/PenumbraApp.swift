@@ -1,9 +1,9 @@
 import SwiftUI
 
 @main
-struct DynamicWallpaperApp: App {
+struct PenumbraApp: App {
     var body: some Scene {
-        Window("Dynamic Wallpaper", id: "main") {
+        Window("Penumbra", id: "main") {
             ContentView()
         }
         .windowStyle(.hiddenTitleBar)

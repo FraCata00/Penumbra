@@ -32,7 +32,7 @@ jobs:
         run: |
           ./Tools/make-dmg.sh "$VERSION"
           ditto -c -k --sequesterRsrc --keepParent \
-            "build/Dynamic Wallpaper.app" "DynamicWallpaper-$VERSION.zip"
+            "build/Penumbra.app" "Penumbra-$VERSION.zip"
 
       - name: Publish the release
         env:
@@ -40,8 +40,8 @@ jobs:
           VERSION: ${{ steps.version.outputs.value }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            --title "Dynamic Wallpaper $VERSION" \
+            --title "Penumbra $VERSION" \
             --notes-file .github/release-notes.md \
             --generate-notes \
-            "DynamicWallpaper-$VERSION.dmg" \
-            "DynamicWallpaper-$VERSION.zip"
+            "Penumbra-$VERSION.dmg" \
+            "Penumbra-$VERSION.zip"

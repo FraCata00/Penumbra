@@ -24,7 +24,7 @@ struct ContentView: View {
     /// The window has no chrome of its own, so the title sits on a strip of glass
     /// while the system keeps drawing the traffic lights on top of it.
     private var titleBar: some View {
-        Text("Dynamic Wallpaper")
+        Text("Penumbra")
             .font(.system(size: 13, weight: .semibold))
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)

@@ -29,7 +29,7 @@ jobs:
       - name: Upload the build
         uses: actions/upload-artifact@v4
         with:
-          name: DynamicWallpaper-${{ github.sha }}
-          path: DynamicWallpaper-ci-*.dmg
+          name: Penumbra-${{ github.sha }}
+          path: Penumbra-ci-*.dmg
           if-no-files-found: error
           retention-days: 14

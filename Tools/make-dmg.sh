@@ -1,12 +1,12 @@
 #!/bin/zsh
-# Packages build/Dynamic Wallpaper.app into a drag-to-install disk image.
-#   ./Tools/make-dmg.sh 1.0.0
+# Packages build/Penumbra.app into a drag-to-install disk image.
+#   ./Tools/make-dmg.sh 1.1.0
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-VERSION="${1:-1.0.0}"
-APP="build/Dynamic Wallpaper.app"
-DMG="DynamicWallpaper-$VERSION.dmg"
+VERSION="${1:-1.1.0}"
+APP="build/Penumbra.app"
+DMG="Penumbra-$VERSION.dmg"
 
 [[ -d "$APP" ]] || { echo "missing $APP — run ./build.sh first" >&2; exit 1; }
 
@@ -16,7 +16,7 @@ ln -s /Applications "$STAGE/Applications"
 
 rm -f "$DMG"
 hdiutil create \
-    -volname "Dynamic Wallpaper" \
+    -volname "Penumbra" \
     -srcfolder "$STAGE" \
     -fs HFS+ \
     -format UDZO \
