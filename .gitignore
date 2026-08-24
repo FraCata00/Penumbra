@@ -7,3 +7,6 @@ Design/
 
 # Release artifacts
 *.zip
+
+# Disk images
+*.dmg

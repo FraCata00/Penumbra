@@ -7,8 +7,9 @@ the switching by reading a metadata tag inside the file.
 
 ## Download
 
-Grab the latest build from [Releases](../../releases), unzip it and drag
-**Dynamic Wallpaper.app** into `/Applications`.
+Grab the latest [release](../../releases): open the `.dmg` and drag
+**Dynamic Wallpaper** into the `Applications` folder next to it. A `.zip` of the
+bare app is attached too.
 
 Requires **macOS 26** (Tahoe) on Apple Silicon. The app is ad-hoc signed and not
 notarized, so Gatekeeper stops it on first launch: right-click the app and pick
@@ -57,8 +58,9 @@ Applied wallpapers land in `~/Pictures/Wallpapers/`.
 ## Build
 
 ```sh
-./build.sh            # produces build/Dynamic Wallpaper.app
-./Tools/make-icon.sh  # regenerates the icon (drawn from code)
+./build.sh                 # produces build/Dynamic Wallpaper.app
+./Tools/make-dmg.sh 1.0.0  # packages it as a drag-to-install disk image
+./Tools/make-icon.sh       # regenerates the icon (drawn from code)
 ```
 
 Only Xcode's Swift toolchain is needed, no `.xcodeproj`: `build.sh` compiles the
