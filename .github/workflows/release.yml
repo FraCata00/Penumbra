@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+
+      - name: Resolve the version
+        id: version
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build the app
+        run: ./build.sh
+
+      - name: Package
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          ./Tools/make-dmg.sh "$VERSION"
+          ditto -c -k --sequesterRsrc --keepParent \
+            "build/Dynamic Wallpaper.app" "DynamicWallpaper-$VERSION.zip"
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Dynamic Wallpaper $VERSION" \
+            --notes-file .github/release-notes.md \
+            --generate-notes \
+            "DynamicWallpaper-$VERSION.dmg" \
+            "DynamicWallpaper-$VERSION.zip"

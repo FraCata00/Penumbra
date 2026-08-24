@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches: [staging, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    # Liquid Glass needs the macOS 26 SDK, so the runner image has to be macOS 26.
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          swiftc --version
+
+      - name: Build the app
+        run: ./build.sh
+
+      - name: Package a disk image
+        run: ./Tools/make-dmg.sh "ci-${GITHUB_SHA:0:7}"
+
+      - name: Upload the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: DynamicWallpaper-${{ github.sha }}
+          path: DynamicWallpaper-ci-*.dmg
+          if-no-files-found: error
+          retention-days: 14
