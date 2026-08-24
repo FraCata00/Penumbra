@@ -35,4 +35,4 @@ PLIST
 [[ -f Resources/AppIcon.icns ]] && cp Resources/AppIcon.icns "$APP/Contents/Resources/"
 
 codesign --force --deep --sign - "$APP" 2>/dev/null || true
-echo "Costruita: $PWD/$APP"
+echo "Built: $PWD/$APP"
