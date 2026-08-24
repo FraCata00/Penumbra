@@ -1,8 +1,8 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// Metà finestra: mostra l'anteprima a tutto campo e accetta un'immagine
-/// per trascinamento o con un click.
+/// Half of the window: shows the preview edge to edge and accepts an image
+/// by drag and drop or with a click.
 struct DropZone: View {
     let role: Role
     let slot: Slot?
@@ -45,7 +45,7 @@ struct DropZone: View {
         } isTargeted: { isTargeted = $0 }
     }
 
-    // Sfondo dei riquadri vuoti: giorno/notte accennati, come nell'icona.
+    // Backdrop for the empty slots: day and night hinted at, as in the app icon.
     private var emptyBackdrop: some View {
         LinearGradient(
             colors: role == .light
@@ -63,7 +63,7 @@ struct DropZone: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text(role.rawValue).fontWeight(.medium)
                 if let slot {
-                    Text(slot.isDerived ? "generata · \(slot.pixelDescription)" : "\(slot.name) · \(slot.pixelDescription)")
+                    Text(slot.isDerived ? "generated · \(slot.pixelDescription)" : "\(slot.name) · \(slot.pixelDescription)")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -73,7 +73,7 @@ struct DropZone: View {
             if slot != nil && isHovering {
                 Button(action: onClear) { Image(systemName: "xmark") }
                     .buttonStyle(.plain)
-                    .help("Rimuovi")
+                    .help("Remove")
             }
         }
         .font(.callout)
@@ -89,7 +89,7 @@ struct DropZone: View {
         VStack(spacing: 10) {
             Image(systemName: "arrow.down.circle.dotted")
                 .font(.system(size: 34, weight: .light))
-            Text("Trascina un'immagine\no clicca per sceglierla")
+            Text("Drop an image here\nor click to choose one")
                 .font(.callout)
                 .multilineTextAlignment(.center)
         }
@@ -102,7 +102,7 @@ struct DropZone: View {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.image]
         panel.allowsMultipleSelection = false
-        panel.message = "Scegli l'immagine per la modalità \(role.rawValue.lowercased())"
+        panel.message = "Choose the image for \(role.rawValue.lowercased()) mode"
         if panel.runModal() == .OK, let url = panel.url { onPick(url) }
     }
 }

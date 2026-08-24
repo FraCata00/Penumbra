@@ -3,15 +3,15 @@ import CoreImage
 import ImageIO
 import UniformTypeIdentifiers
 
-/// Come adattare un'immagine alla risoluzione di destinazione.
+/// How a source image is fitted to the output resolution.
 enum FitMode: String, CaseIterable, Identifiable {
-    case fill = "Riempi"
-    case fit  = "Adatta"
+    case fill = "Fill"
+    case fit  = "Fit"
     var id: String { rawValue }
     var help: String {
         switch self {
-        case .fill: "Ingrandisce fino a coprire tutto e ritaglia il resto"
-        case .fit:  "Rientra tutta nell'inquadratura, con bande ai lati"
+        case .fill: "Scales up to cover the frame and crops the overflow"
+        case .fit:  "Fits the whole image in, leaving bars on the sides"
         }
     }
 }
@@ -23,19 +23,19 @@ struct WallpaperError: LocalizedError {
 
 enum WallpaperKit {
 
-    // MARK: - Caricamento
+    // MARK: - Loading
 
     static func load(_ url: URL) -> CGImage? {
         guard let src = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
         return CGImageSourceCreateImageAtIndex(src, 0, nil)
     }
 
-    // MARK: - Derivazione della variante mancante
+    // MARK: - Deriving the missing variant
 
     private static let ciContext = CIContext(options: [.useSoftwareRenderer: false])
 
-    /// Ricava una versione notturna plausibile da un'immagine diurna:
-    /// abbassa esposizione e saturazione, raffredda i toni verso il blu e chiude i bordi.
+    /// Derives a plausible night version from a daytime image: drops exposure and
+    /// saturation, cools the tones toward blue and closes down the edges.
     static func deriveDark(from image: CGImage) -> CGImage {
         let source = CIImage(cgImage: image)
         var out = source
@@ -56,7 +56,7 @@ enum WallpaperKit {
         return ciContext.createCGImage(out, from: source.extent) ?? image
     }
 
-    /// Ricava una versione diurna da un'immagine notturna (caso meno frequente, resa più incerta).
+    /// Derives a daytime version from a night image — the rarer case, and a shakier result.
     static func deriveLight(from image: CGImage) -> CGImage {
         let source = CIImage(cgImage: image)
         var out = source
@@ -73,10 +73,10 @@ enum WallpaperKit {
         return ciContext.createCGImage(out, from: source.extent) ?? image
     }
 
-    // MARK: - Normalizzazione
+    // MARK: - Normalization
 
-    /// Porta l'immagine esattamente a `size` pixel: le due immagini di un HEIC
-    /// dinamico devono avere la stessa dimensione.
+    /// Brings the image to exactly `size` pixels: both images of a dynamic HEIC
+    /// must share the same dimensions.
     static func normalize(_ image: CGImage, to size: CGSize, mode: FitMode) -> CGImage? {
         let tw = Int(size.width.rounded()), th = Int(size.height.rounded())
         guard tw > 0, th > 0 else { return nil }
@@ -101,15 +101,15 @@ enum WallpaperKit {
         return ctx.makeImage()
     }
 
-    // MARK: - Scrittura dell'HEIC dinamico
+    // MARK: - Writing the dynamic HEIC
 
     private struct AppearanceIndexes: Codable { let l: Int; let d: Int }
 
-    /// Scrive un HEIC a due immagini con il metadato `apple_desktop:apr`,
-    /// quello che dice a macOS quale usare in modalità chiara e quale in scura.
+    /// Writes a two-image HEIC carrying the `apple_desktop:apr` metadata — the tag
+    /// that tells macOS which image to use in light mode and which in dark mode.
     static func writeDynamicHEIC(light: CGImage, dark: CGImage, to url: URL, quality: Double) throws {
         guard light.width == dark.width, light.height == dark.height else {
-            throw WallpaperError(message: "Le due immagini devono avere la stessa dimensione.")
+            throw WallpaperError(message: "Both images must have the same dimensions.")
         }
 
         let encoder = PropertyListEncoder()
@@ -119,11 +119,11 @@ enum WallpaperKit {
         guard let dest = CGImageDestinationCreateWithURL(
             url as CFURL, UTType.heic.identifier as CFString, 2, nil
         ) else {
-            throw WallpaperError(message: "Impossibile creare il file HEIC in \(url.path).")
+            throw WallpaperError(message: "Could not create the HEIC file at \(url.path).")
         }
 
         let metadata = CGImageMetadataCreateMutable()
-        // Senza registrare il prefisso, CGImageMetadataSetTagWithPath fallisce silenziosamente.
+        // Without registering the prefix first, CGImageMetadataSetTagWithPath fails silently.
         CGImageMetadataRegisterNamespaceForPrefix(
             metadata, "http://ns.apple.com/namespace/1.0/" as CFString, "apple_desktop" as CFString, nil
         )
@@ -132,23 +132,23 @@ enum WallpaperKit {
             "apple_desktop" as CFString, "apr" as CFString,
             .string, base64 as CFString
         ), CGImageMetadataSetTagWithPath(metadata, nil, "apple_desktop:apr" as CFString, tag) else {
-            throw WallpaperError(message: "Impossibile scrivere il metadato apple_desktop:apr.")
+            throw WallpaperError(message: "Could not write the apple_desktop:apr metadata.")
         }
 
         let options = [kCGImageDestinationLossyCompressionQuality: quality] as CFDictionary
-        CGImageDestinationAddImageAndMetadata(dest, light, metadata, options)  // indice 0 = chiara
-        CGImageDestinationAddImage(dest, dark, options)                        // indice 1 = scura
+        CGImageDestinationAddImageAndMetadata(dest, light, metadata, options)  // index 0 = light
+        CGImageDestinationAddImage(dest, dark, options)                        // index 1 = dark
 
         guard CGImageDestinationFinalize(dest) else {
-            throw WallpaperError(message: "Scrittura dell'HEIC non riuscita.")
+            throw WallpaperError(message: "Writing the HEIC failed.")
         }
     }
 
-    // MARK: - Applicazione come sfondo
+    // MARK: - Applying as wallpaper
 
     static func setWallpaper(_ url: URL) throws {
         let screens = NSScreen.screens
-        guard !screens.isEmpty else { throw WallpaperError(message: "Nessuno schermo rilevato.") }
+        guard !screens.isEmpty else { throw WallpaperError(message: "No screen detected.") }
         for screen in screens {
             try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
         }
@@ -158,7 +158,7 @@ enum WallpaperKit {
         NSScreen.main.flatMap { NSWorkspace.shared.desktopImageURL(for: $0) }
     }
 
-    /// Risoluzione in pixel reali dello schermo principale.
+    /// Pixel resolution of the main screen.
     static var mainScreenPixelSize: CGSize {
         guard let screen = NSScreen.main else { return CGSize(width: 2560, height: 1600) }
         let scale = screen.backingScaleFactor

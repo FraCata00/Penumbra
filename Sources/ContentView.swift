@@ -29,7 +29,7 @@ struct ContentView: View {
                     statusPill
                 }
                 HStack(spacing: 14) {
-                    labelled("Risoluzione") {
+                    labelled("Resolution") {
                         Picker("", selection: $model.resolution) {
                             ForEach(model.resolutionOptions) { Text($0.label).tag($0) }
                         }
@@ -39,7 +39,7 @@ struct ContentView: View {
 
                     Divider().frame(height: 26)
 
-                    labelled("Ritaglio") {
+                    labelled("Crop") {
                         Picker("", selection: $model.fitMode) {
                             ForEach(FitMode.allCases) { Text($0.rawValue).tag($0) }
                         }
@@ -51,7 +51,7 @@ struct ContentView: View {
 
                     Divider().frame(height: 26)
 
-                    labelled("Qualità") {
+                    labelled("Quality") {
                         HStack(spacing: 8) {
                             Slider(value: $model.quality, in: 0.4...1.0).frame(width: 110)
                             Text(String(format: "%.2f", model.quality))
@@ -61,11 +61,11 @@ struct ContentView: View {
 
                     Divider().frame(height: 26)
 
-                    Button("Salva .heic…") { model.save() }
+                    Button("Save .heic…") { model.save() }
                         .buttonStyle(.glass)
                         .disabled(!model.isReady || model.isWorking)
 
-                    Button("Applica") { model.apply() }
+                    Button("Apply") { model.apply() }
                         .buttonStyle(.glassProminent)
                         .keyboardShortcut(.defaultAction)
                         .disabled(!model.isReady || model.isWorking)

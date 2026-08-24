@@ -2,23 +2,23 @@ import AppKit
 import SwiftUI
 
 enum Role: String {
-    case light = "Chiara"
-    case dark  = "Scura"
+    case light = "Light"
+    case dark  = "Dark"
 }
 
 struct Slot {
     var image: CGImage
     var url: URL?
-    /// true se l'immagine è stata ricavata automaticamente dall'altra, non fornita dall'utente.
+    /// True when this image was derived from the other one rather than supplied by the user.
     var isDerived: Bool
 
     var pixelDescription: String { "\(image.width)×\(image.height)" }
-    var name: String { url?.lastPathComponent ?? (isDerived ? "generata automaticamente" : "senza nome") }
+    var name: String { url?.lastPathComponent ?? (isDerived ? "generated automatically" : "untitled") }
 }
 
 struct ResolutionOption: Hashable, Identifiable {
     let label: String
-    /// nil = mantieni la dimensione dell'immagine sorgente.
+    /// nil = keep the source image's own dimensions.
     let size: CGSize?
     var id: String { label }
 }
@@ -41,7 +41,7 @@ final class WallpaperModel: ObservableObject {
         let native = WallpaperKit.mainScreenPixelSize
         var options: [ResolutionOption] = [
             ResolutionOption(label: "Display (\(Int(native.width))×\(Int(native.height)))", size: native),
-            ResolutionOption(label: "Originale", size: nil),
+            ResolutionOption(label: "Original", size: nil),
         ]
         for preset in [(1920, 1200), (2560, 1600), (3456, 2234), (3840, 2160), (5120, 2880)] {
             let size = CGSize(width: preset.0, height: preset.1)
@@ -54,11 +54,11 @@ final class WallpaperModel: ObservableObject {
 
     var isReady: Bool { light != nil && dark != nil }
 
-    // MARK: - Sorgenti
+    // MARK: - Sources
 
     func load(_ url: URL, into role: Role) {
         guard let image = WallpaperKit.load(url) else {
-            report("Non riesco a leggere \(url.lastPathComponent).", error: true)
+            report("Could not read \(url.lastPathComponent).", error: true)
             return
         }
         let slot = Slot(image: image, url: url, isDerived: false)
@@ -75,14 +75,14 @@ final class WallpaperModel: ObservableObject {
         case .light: light = nil
         case .dark:  dark = nil
         }
-        // Una variante generata da un'immagine appena rimossa non ha più senso.
+        // A variant derived from an image that was just removed no longer means anything.
         if light?.isDerived == true && dark == nil { light = nil }
         if dark?.isDerived == true && light == nil { dark = nil }
         refreshDerived()
         status = ""
     }
 
-    /// Riempie il lato mancante generandolo dall'altro.
+    /// Fills in the missing side by deriving it from the other one.
     private func refreshDerived() {
         let realLight = light.map { !$0.isDerived } ?? false
         let realDark  = dark.map { !$0.isDerived } ?? false
@@ -94,16 +94,16 @@ final class WallpaperModel: ObservableObject {
         }
     }
 
-    // MARK: - Costruzione
+    // MARK: - Building
 
     private func renderPair() throws -> (light: CGImage, dark: CGImage) {
         guard let light, let dark else {
-            throw WallpaperError(message: "Serve almeno un'immagine.")
+            throw WallpaperError(message: "At least one image is required.")
         }
         let target = resolution.size ?? CGSize(width: light.image.width, height: light.image.height)
         guard let l = WallpaperKit.normalize(light.image, to: target, mode: fitMode),
               let d = WallpaperKit.normalize(dark.image, to: target, mode: fitMode) else {
-            throw WallpaperError(message: "Ridimensionamento non riuscito.")
+            throw WallpaperError(message: "Resizing failed.")
         }
         return (l, d)
     }
@@ -113,10 +113,10 @@ final class WallpaperModel: ObservableObject {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.heic]
         panel.nameFieldStringValue = suggestedFileName()
-        panel.message = "Salva lo sfondo dinamico (light + dark in un solo file)"
+        panel.message = "Save the dynamic wallpaper (light + dark in a single file)"
         guard panel.runModal() == .OK, let url = panel.url else { return }
 
-        perform("Salvato in \(url.path)") {
+        perform("Saved to \(url.path)") {
             let pair = try self.renderPair()
             try WallpaperKit.writeDynamicHEIC(light: pair.light, dark: pair.dark, to: url, quality: self.quality)
         }
@@ -127,12 +127,12 @@ final class WallpaperModel: ObservableObject {
         let folder = FileManager.default.homeDirectoryForCurrentUser
             .appending(path: "Pictures/Wallpapers", directoryHint: .isDirectory)
 
-        perform("Sfondo applicato — cambia aspetto di sistema per vedere lo switch") {
+        perform("Wallpaper applied — switch the system appearance to see it change") {
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             let pair = try self.renderPair()
 
-            // macOS non ridisegna lo sfondo se il percorso è identico a quello già attivo,
-            // quindi alterno fra due nomi e ripulisco il precedente.
+            // macOS does not redraw the desktop when the path matches the wallpaper already
+            // in use, so alternate between two names and clean up the previous one.
             let stem = (self.suggestedFileName() as NSString).deletingPathExtension
             let primary = folder.appending(path: "\(stem).heic")
             let current = WallpaperKit.currentWallpaperURL?.standardizedFileURL
@@ -150,14 +150,14 @@ final class WallpaperModel: ObservableObject {
 
     private func suggestedFileName() -> String {
         let base = light?.url ?? dark?.url
-        let stem = base.map { ($0.deletingPathExtension().lastPathComponent) } ?? "Sfondo"
+        let stem = base.map { ($0.deletingPathExtension().lastPathComponent) } ?? "Wallpaper"
         return "\(stem)-dynamic.heic"
     }
 
-    /// Esegue il lavoro pesante fuori dal main thread e riporta l'esito in interfaccia.
+    /// Runs the heavy work off the main thread and reports the outcome to the UI.
     private func perform(_ successMessage: String, _ work: @escaping () throws -> Void) {
         isWorking = true
-        status = "Elaborazione…"
+        status = "Working…"
         isError = false
         Task.detached(priority: .userInitiated) {
             do {

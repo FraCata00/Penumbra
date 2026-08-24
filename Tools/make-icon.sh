@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Rigenera Resources/AppIcon.icns disegnando l'icona da codice.
+# Regenerates Resources/AppIcon.icns by drawing the icon from code.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 WORK=$(mktemp -d)
@@ -12,4 +12,4 @@ done
 mkdir -p Resources
 iconutil -c icns "$SET" -o Resources/AppIcon.icns
 rm -rf "$WORK"
-echo "Resources/AppIcon.icns rigenerata"
+echo "Resources/AppIcon.icns regenerated"

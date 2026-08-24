@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Compila DynamicWallpaper e ne costruisce il bundle .app, senza Xcode.
+# Builds DynamicWallpaper and assembles its .app bundle, without Xcode.
 set -euo pipefail
 cd "$(dirname "$0")"
 
