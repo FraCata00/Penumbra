@@ -2,6 +2,13 @@ Drop a daytime image and a night image, hit **Apply**, and macOS switches betwee
 them on its own whenever the system appearance changes — no daemon, no background
 script. Give it only one image and the other variant is derived for you.
 
+### Updates
+
+Penumbra keeps an eye on its own releases. The launch screen checks once a day and
+offers a newer version right there, before the app gets in your way, and
+*Penumbra → Check for Updates…* asks on demand. The check is an unauthenticated
+request to the public releases API — no account, no telemetry.
+
 ### Requirements
 
 - macOS 26 (Tahoe) — the interface uses Liquid Glass

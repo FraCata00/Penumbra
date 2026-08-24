@@ -22,7 +22,7 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
     <key>CFBundleExecutable</key>           <string>Penumbra</string>
     <key>CFBundleIdentifier</key>           <string>local.francescocataldo.Penumbra</string>
     <key>CFBundlePackageType</key>          <string>APPL</string>
-    <key>CFBundleShortVersionString</key>   <string>1.2.0</string>
+    <key>CFBundleShortVersionString</key>   <string>1.3.0</string>
     <key>CFBundleVersion</key>              <string>2</string>
     <key>CFBundleIconFile</key>             <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>       <string>26.0</string>

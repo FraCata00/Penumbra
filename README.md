@@ -67,10 +67,13 @@ Applied wallpapers land in `~/Pictures/Wallpapers/`.
 ## Updates
 
 Penumbra asks GitHub once a day whether a newer release exists, and on demand from
-*Penumbra → Check for Updates…*. It never installs anything on its own: it shows
-the release notes and opens the disk image download, and swapping the app stays a
-deliberate drag into `Applications`. A skipped version stays hidden until you ask
-explicitly.
+*Penumbra → Check for Updates…*. The daily check runs behind the launch screen, so
+a new version is offered there — before the app gets in the way — rather than
+interrupting you later.
+
+It never installs anything on its own: it shows the release notes and opens the
+disk image download, and swapping the app stays a deliberate drag into
+`Applications`. A skipped version stays hidden until you ask explicitly.
 
 The check is a plain unauthenticated `GET` to the public releases API — no
 account, no telemetry, nothing sent anywhere.
@@ -98,6 +101,7 @@ Sources/
   ContentView.swift         # window layout and backdrop
   DesktopPreview.swift      # one variant inside a mock desktop, and the drop target
   InspectorPanel.swift      # the glass column on the right
+  SplashView.swift          # launch screen, and where an update is offered
   UpdateChecker.swift       # asks GitHub whether a newer release exists
   UpdateSheet.swift         # the panel offering the download
   PenumbraApp.swift         # entry point, menu commands, update presentation
