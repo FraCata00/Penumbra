@@ -5,6 +5,19 @@ both the daytime and the night image, which macOS switches between on its own wh
 the system appearance changes. No daemon, no background script — the system does
 the switching by reading a metadata tag inside the file.
 
+## Download
+
+Grab the latest build from [Releases](../../releases), unzip it and drag
+**Dynamic Wallpaper.app** into `/Applications`.
+
+Requires **macOS 26** (Tahoe) on Apple Silicon. The app is ad-hoc signed and not
+notarized, so Gatekeeper stops it on first launch: right-click the app and pick
+**Open**, or clear the quarantine flag with
+
+```sh
+xattr -dr com.apple.quarantine "/Applications/Dynamic Wallpaper.app"
+```
+
 ## How it works
 
 A macOS dynamic wallpaper is a multi-image HEIC carrying an XMP tag in the
@@ -28,7 +41,9 @@ Two details that cost hours if you don't know them:
 
 ## Usage
 
-Drop an image on the *Light* slot and one on the *Dark* slot, then hit **Apply**.
+Drop an image on the *Light* preview and one on the *Dark* preview, then hit
+**Apply**. Each variant is shown inside a mock desktop, menu bar and Dock included,
+so you can tell straight away whether the menu bar text still reads against it.
 Give it only one and the other variant is derived: the night one by dropping
 exposure and saturation, cooling the tones toward blue and closing down the edges
 with a vignette.
@@ -49,7 +64,7 @@ Applied wallpapers land in `~/Pictures/Wallpapers/`.
 Only Xcode's Swift toolchain is needed, no `.xcodeproj`: `build.sh` compiles the
 sources with `swiftc` and assembles the `.app` bundle by hand.
 
-Requires **macOS 26** — the interface uses Liquid Glass (`glassEffect`,
+The interface needs **macOS 26** for Liquid Glass (`glassEffect`,
 `GlassEffectContainer`, `.buttonStyle(.glass)`).
 
 ## Layout
@@ -58,8 +73,9 @@ Requires **macOS 26** — the interface uses Liquid Glass (`glassEffect`,
 Sources/
   WallpaperKit.swift        # images, HEIC, metadata, setting the wallpaper
   WallpaperModel.swift      # app state and orchestration
-  ContentView.swift         # window and the glass control bar
-  DropZone.swift            # drag-and-drop slot with preview
+  ContentView.swift         # window layout and backdrop
+  DesktopPreview.swift      # one variant inside a mock desktop, and the drop target
+  InspectorPanel.swift      # the glass column on the right
   DynamicWallpaperApp.swift # entry point
 Tools/mkicon.swift          # app icon drawn with CoreGraphics
 ```

@@ -4,3 +4,6 @@ build/
 
 # UI mockups, not part of the app
 Design/
+
+# Release artifacts
+*.zip
