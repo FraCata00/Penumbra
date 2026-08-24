@@ -11,9 +11,20 @@ script. Give it only one image and the other variant is derived for you.
 
 Open the `.dmg` and drag **Dynamic Wallpaper** into `Applications`.
 
-The app is ad-hoc signed, not notarized, so Gatekeeper stops it on first launch:
-right-click the app and pick **Open**, or clear the quarantine flag with
+The app is ad-hoc signed and **not notarized**, so on first launch macOS says it
+"could not verify that this app is free of malware". That is a signing status, not
+a verdict about the app. Two ways past it:
 
-```sh
-xattr -dr com.apple.quarantine "/Applications/Dynamic Wallpaper.app"
-```
+- **Terminal** — clear the quarantine flag the download added:
+
+  ```sh
+  xattr -dr com.apple.quarantine "/Applications/Dynamic Wallpaper.app"
+  ```
+
+- **System Settings** — try to open the app once, let it be blocked, then go to
+  *Privacy & Security*, scroll to the bottom and click **Open Anyway**.
+
+Right-click → *Open* no longer works as a bypass on macOS 15 and later.
+
+Building from source sidesteps this entirely: a locally built app is never
+quarantined.
