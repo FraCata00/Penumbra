@@ -2,6 +2,11 @@ build/
 .DS_Store
 *.heic
 
+# Xcode user/derived state (TaskPad)
+xcuserdata/
+DerivedData/
+*.xcuserstate
+
 # UI mockups, not part of the app
 Design/
 
