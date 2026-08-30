@@ -28,7 +28,7 @@ struct SidebarView: View {
                 .onDelete(perform: deleteLists)
             }
         }
-        .navigationTitle("TaskPad")
+        .navigationTitle("TaskOS")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

@@ -2,7 +2,7 @@ build/
 .DS_Store
 *.heic
 
-# Xcode user/derived state (TaskPad)
+# Xcode user/derived state (TaskOS)
 xcuserdata/
 DerivedData/
 *.xcuserstate

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AE60FDC830E6ED79C9A35341"
-               BuildableName = "TaskPad.app"
-               BlueprintName = "TaskPad"
-               ReferencedContainer = "container:TaskPad.xcodeproj">
+               BlueprintIdentifier = "116608AAF1AEA40357E2D15B"
+               BuildableName = "TaskOS.app"
+               BlueprintName = "TaskOS"
+               ReferencedContainer = "container:TaskOS.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AE60FDC830E6ED79C9A35341"
-            BuildableName = "TaskPad.app"
-            BlueprintName = "TaskPad"
-            ReferencedContainer = "container:TaskPad.xcodeproj">
+            BlueprintIdentifier = "116608AAF1AEA40357E2D15B"
+            BuildableName = "TaskOS.app"
+            BlueprintName = "TaskOS"
+            ReferencedContainer = "container:TaskOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AE60FDC830E6ED79C9A35341"
-            BuildableName = "TaskPad.app"
-            BlueprintName = "TaskPad"
-            ReferencedContainer = "container:TaskPad.xcodeproj">
+            BlueprintIdentifier = "116608AAF1AEA40357E2D15B"
+            BuildableName = "TaskOS.app"
+            BlueprintName = "TaskOS"
+            ReferencedContainer = "container:TaskOS.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

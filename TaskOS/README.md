@@ -1,4 +1,4 @@
-# TaskPad
+# TaskOS
 
 A native SwiftUI to-do list app for iPad: multiple lists, due dates, priorities,
 and a two-column `NavigationSplitView` layout suited to the iPad's wider screen.
@@ -17,15 +17,15 @@ and a two-column `NavigationSplitView` layout suited to the iPad's wider screen.
 
 ## Build & run
 
-Open `TaskPad.xcodeproj` in Xcode, pick an iPad simulator (or a connected iPad),
+Open `TaskOS.xcodeproj` in Xcode, pick an iPad simulator (or a connected iPad),
 and hit Run. There is no external dependency to fetch — the project only uses
 first-party frameworks (SwiftUI, SwiftData).
 
 ## Layout
 
 ```
-TaskPad/
-  TaskPadApp.swift        # entry point, SwiftData model container
+TaskOS/
+  TaskOSApp.swift          # entry point, SwiftData model container
   Models/
     TaskList.swift         # a list of tasks (name, icon, color)
     TaskItem.swift          # a single task (title, notes, due date, priority)
